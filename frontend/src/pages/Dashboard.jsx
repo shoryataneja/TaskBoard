@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux'
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import Column from '../components/Column'
@@ -5,91 +6,14 @@ import Column from '../components/Column'
 const TEAM_AVATARS = ['PJ', 'AK', 'SR', 'MV', 'RD']
 const AVATAR_COLORS = ['bg-purple-400', 'bg-pink-400', 'bg-yellow-400', 'bg-green-400', 'bg-blue-400']
 
-const COLUMNS = [
-  {
-    id: 'todo',
-    title: 'To Do',
-    tasks: [
-      {
-        id: 1,
-        priority: 'Low',
-        title: 'Brainstorming',
-        description: 'Brainstorming brings team members together to generate creative ideas.',
-        avatars: ['AK', 'SR', 'MV'],
-        comments: 12,
-        files: 0,
-      },
-      {
-        id: 2,
-        priority: 'High',
-        title: 'Research',
-        description: 'User research helps you to create an optimal product for users.',
-        avatars: ['PJ', 'RD'],
-        comments: 10,
-        files: 3,
-      },
-      {
-        id: 3,
-        priority: 'High',
-        title: 'Wireframes',
-        description: null,
-        avatars: ['AK', 'MV', 'SR', 'PJ'],
-        comments: 8,
-        files: 2,
-      },
-    ],
-  },
-  {
-    id: 'inProgress',
-    title: 'On Progress',
-    tasks: [
-      {
-        id: 4,
-        priority: 'Low',
-        title: 'Onboarding Illustrations',
-        description: null,
-        avatars: ['SR', 'PJ'],
-        comments: 14,
-        files: 15,
-      },
-      {
-        id: 5,
-        priority: 'Low',
-        title: 'Moodboard',
-        description: null,
-        avatars: ['AK', 'RD', 'MV'],
-        comments: 9,
-        files: 10,
-      },
-    ],
-  },
-  {
-    id: 'done',
-    title: 'Done',
-    tasks: [
-      {
-        id: 6,
-        priority: 'Completed',
-        title: 'Design System',
-        description: 'It just needs to adapt the UI from what you did before.',
-        avatars: ['PJ', 'AK'],
-        comments: 12,
-        files: 15,
-      },
-      {
-        id: 7,
-        priority: 'Completed',
-        title: 'Sticky Notes',
-        description: 'We need to make it clear what\'s important.',
-        avatars: ['SR', 'MV', 'RD'],
-        comments: 9,
-        files: 4,
-      },
-    ],
-  },
+const COLUMN_META = [
+  { id: 'todo',       title: 'To Do' },
+  { id: 'inProgress', title: 'On Progress' },
+  { id: 'done',       title: 'Done' },
 ]
 
 export default function Dashboard() {
+  const tasks = useSelector((state) => state.tasks)
   return (
     <div className="min-h-screen w-screen bg-gray-100 flex font-sans">
       <Sidebar />
@@ -157,8 +81,8 @@ export default function Dashboard() {
 
           {/* Kanban board */}
           <div className="flex gap-6 w-full items-start overflow-x-auto">
-            {COLUMNS.map((col) => (
-              <Column key={col.id} id={col.id} title={col.title} tasks={col.tasks} />
+            {COLUMN_META.map((col) => (
+              <Column key={col.id} id={col.id} title={col.title} tasks={tasks[col.id]} />
             ))}
           </div>
         </main>
