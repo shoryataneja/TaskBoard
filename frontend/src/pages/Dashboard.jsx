@@ -4,6 +4,7 @@ import { moveTask } from '../redux/taskSlice'
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import Column from '../components/Column'
+import FilterBar from '../components/FilterBar'
 
 const TEAM_AVATARS = ['PJ', 'AK', 'SR', 'MV', 'RD']
 const AVATAR_COLORS = ['bg-purple-400', 'bg-pink-400', 'bg-yellow-400', 'bg-green-400', 'bg-blue-400']
@@ -16,7 +17,16 @@ const COLUMN_META = [
 
 export default function Dashboard() {
   const tasks = useSelector((state) => state.tasks)
+  const filter = useSelector((state) => state.filter.filter)
   const dispatch = useDispatch()
+
+  function getFilteredTasks(columnId, columnTasks) {
+    if (filter === 'all') return columnTasks
+    if (filter === 'completed') return columnId === 'done' ? columnTasks : []
+    if (filter === 'high') return columnTasks.filter((t) => t.priority === 'High')
+    if (filter === 'low') return columnTasks.filter((t) => t.priority === 'Low')
+    return columnTasks
+  }
 
   function handleDragEnd(result) {
     const { source, destination, draggableId } = result
@@ -61,12 +71,7 @@ export default function Dashboard() {
 
               {/* Filter / Today buttons */}
               <div className="flex items-center gap-2 mt-1">
-                <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z" />
-                  </svg>
-                  Filter
-                </button>
+                <FilterBar />
                 <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -101,7 +106,13 @@ export default function Dashboard() {
           <DragDropContext onDragEnd={handleDragEnd}>
             <div className="flex gap-6 w-full items-start overflow-x-auto">
               {COLUMN_META.map((col) => (
-                <Column key={col.id} id={col.id} title={col.title} tasks={tasks[col.id]} />
+                <Column
+                  key={col.id}
+                  id={col.id}
+                  title={col.title}
+                  tasks={tasks[col.id]}
+                  filteredTasks={getFilteredTasks(col.id, tasks[col.id])}
+                />
               ))}
             </div>
           </DragDropContext>
