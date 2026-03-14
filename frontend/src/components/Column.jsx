@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Droppable, Draggable } from '@hello-pangea/dnd'
 import TaskCard from './TaskCard'
 import AddTaskModal from './AddTaskModal'
 
@@ -33,11 +34,35 @@ export default function Column({ id, title, tasks }) {
       </div>
 
       {/* Cards */}
-      <div className="flex flex-col gap-3">
-        {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
-        ))}
-      </div>
+      <Droppable droppableId={id}>
+        {(provided, snapshot) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            className={`flex flex-col gap-3 min-h-[4rem] rounded-2xl transition-colors
+              ${snapshot.isDraggingOver ? 'bg-purple-50' : ''}`}
+          >
+            {tasks.map((task, index) => (
+              <Draggable key={String(task.id)} draggableId={String(task.id)} index={index}>
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    style={{
+                      ...provided.draggableProps.style,
+                      opacity: snapshot.isDragging ? 0.85 : 1,
+                    }}
+                  >
+                    <TaskCard task={task} />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
 
       {modalOpen && <AddTaskModal columnId={id} onClose={() => setModalOpen(false)} />}
     </div>
