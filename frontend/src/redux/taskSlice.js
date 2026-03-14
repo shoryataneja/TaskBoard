@@ -79,9 +79,11 @@ const taskSlice = createSlice({
       state[status].push(action.payload)
     },
     moveTask: (state, action) => {
-      const { task, from, to } = action.payload
-      state[from] = state[from].filter((t) => t.id !== task.id)
-      state[to].push(task)
+      const { taskId, sourceColumn, destinationColumn, destinationIndex } = action.payload
+      const task = state[sourceColumn].find((t) => String(t.id) === String(taskId))
+      if (!task) return
+      state[sourceColumn] = state[sourceColumn].filter((t) => String(t.id) !== String(taskId))
+      state[destinationColumn].splice(destinationIndex, 0, task)
     },
   },
 })
