@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import TaskCard from './TaskCard'
+import AddTaskModal from './AddTaskModal'
 
 const ACCENT = {
   todo: 'bg-purple-500',
@@ -7,6 +9,8 @@ const ACCENT = {
 }
 
 export default function Column({ id, title, tasks }) {
+  const [modalOpen, setModalOpen] = useState(false)
+
   return (
     <div className="flex-1 min-w-0 flex flex-col gap-3">
       {/* Header */}
@@ -19,7 +23,10 @@ export default function Column({ id, title, tasks }) {
               {tasks.length}
             </span>
           </div>
-          <button className="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center hover:bg-purple-700 transition-colors text-sm leading-none">
+          <button
+            onClick={() => setModalOpen(true)}
+            className="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center hover:bg-purple-700 transition-colors text-sm leading-none"
+          >
             +
           </button>
         </div>
@@ -31,6 +38,8 @@ export default function Column({ id, title, tasks }) {
           <TaskCard key={task.id} task={task} />
         ))}
       </div>
+
+      {modalOpen && <AddTaskModal columnId={id} onClose={() => setModalOpen(false)} />}
     </div>
   )
 }
