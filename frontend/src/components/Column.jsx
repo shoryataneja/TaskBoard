@@ -9,8 +9,9 @@ const ACCENT = {
   done: 'bg-green-500',
 }
 
-export default function Column({ id, title, tasks }) {
+export default function Column({ id, title, tasks, filteredTasks }) {
   const [modalOpen, setModalOpen] = useState(false)
+  const isFiltered = filteredTasks.length !== tasks.length
 
   return (
     <div className="flex-1 min-w-0 flex flex-col gap-3">
@@ -21,7 +22,7 @@ export default function Column({ id, title, tasks }) {
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold text-gray-800">{title}</span>
             <span className="text-xs bg-gray-100 text-gray-500 font-medium px-2 py-0.5 rounded-full">
-              {tasks.length}
+              {filteredTasks.length}
             </span>
           </div>
           <button
@@ -42,23 +43,27 @@ export default function Column({ id, title, tasks }) {
             className={`flex flex-col gap-3 min-h-[4rem] rounded-2xl transition-colors
               ${snapshot.isDraggingOver ? 'bg-purple-50' : ''}`}
           >
-            {tasks.map((task, index) => (
-              <Draggable key={String(task.id)} draggableId={String(task.id)} index={index}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    style={{
-                      ...provided.draggableProps.style,
-                      opacity: snapshot.isDragging ? 0.85 : 1,
-                    }}
-                  >
-                    <TaskCard task={task} />
-                  </div>
-                )}
-              </Draggable>
-            ))}
+            {tasks.map((task, index) => {
+              const visible = !isFiltered || filteredTasks.some((t) => String(t.id) === String(task.id))
+              return (
+                <Draggable key={String(task.id)} draggableId={String(task.id)} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={{
+                        ...provided.draggableProps.style,
+                        opacity: snapshot.isDragging ? 0.85 : 1,
+                        display: visible ? undefined : 'none',
+                      }}
+                    >
+                      <TaskCard task={task} />
+                    </div>
+                  )}
+                </Draggable>
+              )
+            })}
             {provided.placeholder}
           </div>
         )}
