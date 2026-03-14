@@ -1,4 +1,6 @@
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { DragDropContext } from '@hello-pangea/dnd'
+import { moveTask } from '../redux/taskSlice'
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import Column from '../components/Column'
@@ -14,6 +16,22 @@ const COLUMN_META = [
 
 export default function Dashboard() {
   const tasks = useSelector((state) => state.tasks)
+  const dispatch = useDispatch()
+
+  function handleDragEnd(result) {
+    const { source, destination, draggableId } = result
+    if (!destination) return
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    ) return
+    dispatch(moveTask({
+      taskId: draggableId,
+      sourceColumn: source.droppableId,
+      destinationColumn: destination.droppableId,
+      destinationIndex: destination.index,
+    }))
+  }
   return (
     <div className="min-h-screen w-screen bg-gray-100 flex font-sans">
       <Sidebar />
@@ -80,11 +98,13 @@ export default function Dashboard() {
           </div>
 
           {/* Kanban board */}
-          <div className="flex gap-6 w-full items-start overflow-x-auto">
-            {COLUMN_META.map((col) => (
-              <Column key={col.id} id={col.id} title={col.title} tasks={tasks[col.id]} />
-            ))}
-          </div>
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <div className="flex gap-6 w-full items-start overflow-x-auto">
+              {COLUMN_META.map((col) => (
+                <Column key={col.id} id={col.id} title={col.title} tasks={tasks[col.id]} />
+              ))}
+            </div>
+          </DragDropContext>
         </main>
       </div>
     </div>
