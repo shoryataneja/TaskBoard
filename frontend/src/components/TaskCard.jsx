@@ -1,3 +1,7 @@
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { toggleSubtask } from '../redux/taskSlice'
+
 const PRIORITY_STYLES = {
   Low: 'bg-blue-50 text-blue-500',
   High: 'bg-orange-50 text-orange-500',
@@ -13,7 +17,9 @@ const AVATAR_COLORS = [
 ]
 
 export default function TaskCard({ task }) {
-  const { priority, title, description, avatars, comments, files } = task
+  const { id, priority, title, description, avatars, comments, files, subtasks = [] } = task
+  const dispatch = useDispatch()
+  const [expanded, setExpanded] = useState(false)
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-3">
@@ -30,9 +36,44 @@ export default function TaskCard({ task }) {
         )}
       </div>
 
+      {/* Subtasks section */}
+      <div className="flex flex-col gap-2">
+        <button
+          onClick={() => setExpanded((v) => !v)}
+          className="flex items-center justify-between w-full"
+        >
+          <span className="text-xs text-gray-500 font-medium">
+            Subtasks{subtasks.length > 0 ? ` · ${subtasks.length} total` : ''}
+          </span>
+          <svg
+            className={`w-3.5 h-3.5 text-gray-400 transition-transform ${expanded ? 'rotate-180' : ''}`}
+            fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        {expanded && subtasks.length > 0 && (
+          <div className="flex flex-col gap-1.5 mt-1">
+            {subtasks.map((s) => (
+              <label key={s.id} className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={s.completed}
+                  onChange={() => dispatch(toggleSubtask({ taskId: id, subtaskId: s.id }))}
+                  className="w-3.5 h-3.5 rounded accent-purple-500 cursor-pointer flex-shrink-0"
+                />
+                <span className={`text-xs leading-relaxed ${s.completed ? 'line-through text-gray-300' : 'text-gray-600'}`}>
+                  {s.text}
+                </span>
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
+
       {/* Footer */}
       <div className="flex items-center justify-between pt-1">
-        {/* Avatars */}
         <div className="flex -space-x-2">
           {avatars.map((initials, i) => (
             <div
@@ -43,8 +84,6 @@ export default function TaskCard({ task }) {
             </div>
           ))}
         </div>
-
-        {/* Stats */}
         <div className="flex items-center gap-3 text-gray-400">
           <span className="flex items-center gap-1 text-xs">
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
