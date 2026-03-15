@@ -43,32 +43,34 @@ const menuItems = [
 ]
 
 const projects = [
-  { name: 'Mobile App', color: 'bg-purple-500', active: true },
-  { name: 'Website Redesign', color: 'bg-green-400', active: false },
-  { name: 'Design System', color: 'bg-orange-400', active: false },
-  { name: 'Wireframes', color: 'bg-pink-400', active: false },
+  { name: 'Mobile App',       color: '#8bc364', active: true  },
+  { name: 'Website Redesign', color: '#f2a93b', active: false },
+  { name: 'Design System',    color: '#e0cdfa', active: false },
+  { name: 'Wireframes',       color: '#80a4e4', active: false },
 ]
 
 export default function Sidebar() {
   return (
-    <aside className="w-64 min-h-screen bg-gray-50 border-r border-gray-200 flex flex-col px-4 py-6 shrink-0">
-      {/* Project name */}
-      <div className="flex items-center gap-2 mb-8 px-2">
-        <div className="w-7 h-7 rounded-lg bg-purple-600 flex items-center justify-center">
-          <span className="text-white text-xs font-bold">P</span>
+    <aside className="w-64 min-h-screen bg-white border-r border-gray-100 flex flex-col px-4 py-6 shrink-0">
+      {/* Branding */}
+      <div className="flex items-center gap-2.5 mb-8 px-2">
+        <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: '#4b31dc' }}>
+          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
+          </svg>
         </div>
-        <span className="font-semibold text-gray-800 text-sm">TaskBoard</span>
+        <span className="font-extrabold tracking-tight text-2xl" style={{ color: '#0c062b' }}>Project M.</span>
       </div>
 
       {/* Menu */}
-      <nav className="flex flex-col gap-1 mb-8">
+      <nav className="flex flex-col gap-0.5 mb-8">
         {menuItems.map((item) => (
           <button
             key={item.label}
-            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors
               ${item.label === 'Tasks'
-                ? 'bg-purple-100 text-purple-700 font-medium'
-                : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'}`}
+                ? 'bg-purple-50 text-purple-700 font-semibold'
+                : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'}`}
           >
             {item.icon}
             {item.label}
@@ -77,31 +79,41 @@ export default function Sidebar() {
       </nav>
 
       {/* My Projects */}
-      <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest px-3 mb-3">
+      <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest px-3 mb-2">
         My Projects
       </p>
-      <div className="flex flex-col gap-1 mb-auto">
+      <div className="flex flex-col gap-0.5 mb-auto">
         {projects.map((p) => (
           <button
             key={p.name}
-            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors
               ${p.active
-                ? 'bg-purple-100 text-purple-700 font-medium'
-                : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'}`}
+                ? 'bg-purple-50 text-purple-700 font-semibold'
+                : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'}`}
           >
-            <span className={`w-2.5 h-2.5 rounded-full ${p.color} shrink-0`} />
+            <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: p.color }} />
             {p.name}
           </button>
         ))}
       </div>
 
-      {/* Bottom card */}
-      <div className="mt-6 bg-purple-600 rounded-2xl p-4 text-white">
-        <p className="font-semibold text-sm mb-1">Thoughts Time</p>
-        <p className="text-xs text-purple-200 mb-3 leading-relaxed">
+      {/* Thoughts Time card */}
+      <div className="mt-6 rounded-2xl p-5 text-center overflow-hidden relative bg-white border border-gray-100 shadow-sm">
+        {/* Lightbulb icon */}
+        <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3" style={{ backgroundColor: '#fef9ec' }}>
+          <svg className="w-6 h-6" fill="none" stroke="#f3cd4a" strokeWidth={1.8} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          </svg>
+        </div>
+
+        <p className="font-bold text-sm mb-1.5" style={{ color: '#0c062b' }}>Thoughts Time</p>
+        <p className="text-[11px] mb-4 leading-relaxed px-1" style={{ color: '#777485' }}>
           Got ideas? Share them with your team and keep everyone aligned.
         </p>
-        <button className="w-full bg-white text-purple-700 text-xs font-semibold py-2 rounded-lg hover:bg-purple-50 transition-colors">
+        <button
+          className="w-full text-xs font-bold py-2.5 rounded-xl transition-colors"
+          style={{ backgroundColor: '#4b31dc', color: '#ffffff' }}
+        >
           Write a message
         </button>
       </div>
