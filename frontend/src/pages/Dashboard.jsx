@@ -23,15 +23,18 @@ export default function Dashboard() {
 
   const today = new Date()
   today.setHours(0, 0, 0, 0)
-  const hasOverdue = Object.values(tasks).flat().some(
+  const allTasks = Object.values(tasks).flat()
+  const hasOverdue = allTasks.some(
     (t) => t.dueDate && new Date(t.dueDate + 'T00:00:00') < today
   )
+  const uniqueTags = [...new Set(allTasks.map((t) => t.tag).filter(Boolean))]
 
   function getFilteredTasks(columnId, columnTasks) {
     if (filter === 'all') return columnTasks
     if (filter === 'completed') return columnId === 'done' ? columnTasks : []
     if (filter === 'high') return columnTasks.filter((t) => t.priority === 'High')
     if (filter === 'low') return columnTasks.filter((t) => t.priority === 'Low')
+    if (uniqueTags.includes(filter)) return columnTasks.filter((t) => t.tag === filter)
     return columnTasks
   }
 
@@ -87,7 +90,7 @@ export default function Dashboard() {
 
               {/* Filter / Today / Logout buttons */}
               <div className="flex items-center gap-2 mt-1">
-                <FilterBar />
+                <FilterBar tags={uniqueTags} />
                 <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />

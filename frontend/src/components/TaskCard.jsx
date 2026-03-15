@@ -26,12 +26,6 @@ const TAG_COLORS = [
   'bg-orange-100 text-orange-600',
 ]
 
-const DIFFICULTY_STYLES = {
-  Easy:   'bg-green-50 text-green-600',
-  Medium: 'bg-yellow-50 text-yellow-700',
-  Hard:   'bg-red-50 text-red-500',
-}
-
 function tagColor(str) {
   let n = 0
   for (let i = 0; i < str.length; i++) n += str.charCodeAt(i)
@@ -53,7 +47,7 @@ const AVATAR_COLORS = [
 ]
 
 export default function TaskCard({ task }) {
-  const { id, priority, title, description, avatars, comments, files, subtasks = [], dueDate = null, customFields = {} } = task
+  const { id, priority, title, description, avatars, comments, files, subtasks = [], dueDate = null, tag = null } = task
   const dispatch = useDispatch()
   const [expanded, setExpanded] = useState(false)
   const [input, setInput] = useState('')
@@ -95,25 +89,11 @@ export default function TaskCard({ task }) {
         )}
       </div>
 
-      {/* Custom field badges */}
-      {(customFields.tag || customFields.difficulty || customFields.category) && (
-        <div className="flex flex-wrap gap-1.5">
-          {customFields.tag && (
-            <span className={`text-[11px] font-medium px-2 py-0.5 rounded-md ${tagColor(customFields.tag)}`}>
-              {customFields.tag}
-            </span>
-          )}
-          {customFields.category && (
-            <span className={`text-[11px] font-medium px-2 py-0.5 rounded-md ${tagColor(customFields.category)}`}>
-              {customFields.category}
-            </span>
-          )}
-          {customFields.difficulty && (
-            <span className={`text-[11px] font-medium px-2 py-0.5 rounded-md ${DIFFICULTY_STYLES[customFields.difficulty] ?? 'bg-gray-100 text-gray-500'}`}>
-              {customFields.difficulty}
-            </span>
-          )}
-        </div>
+      {/* Tag badge */}
+      {tag && (
+        <span className={`self-start text-[11px] font-medium px-2 py-0.5 rounded-md ${tagColor(tag)}`}>
+          {tag}
+        </span>
       )}
 
       {/* Subtasks section */}

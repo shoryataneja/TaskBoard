@@ -2,14 +2,14 @@ import { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { setFilter } from '../redux/filterSlice'
 
-const OPTIONS = [
+const STATIC_OPTIONS = [
   { value: 'all',       label: 'All' },
   { value: 'high',      label: 'High Priority' },
   { value: 'low',       label: 'Low Priority' },
   { value: 'completed', label: 'Completed' },
 ]
 
-export default function FilterBar() {
+export default function FilterBar({ tags = [] }) {
   const dispatch = useDispatch()
   const active = useSelector((state) => state.filter.filter)
   const [open, setOpen] = useState(false)
@@ -23,6 +23,8 @@ export default function FilterBar() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  const tagOptions = tags.map((t) => ({ value: t, label: t }))
+  const OPTIONS = [...STATIC_OPTIONS, ...tagOptions]
   const activeLabel = OPTIONS.find((o) => o.value === active)?.label ?? 'All'
   const isFiltered = active !== 'all'
 
