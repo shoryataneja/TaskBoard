@@ -103,8 +103,19 @@ const taskSlice = createSlice({
         }
       }
     },
+    toggleSubtask: (state, action) => {
+      const { taskId, subtaskId } = action.payload
+      for (const col of Object.values(state)) {
+        const task = col.find((t) => String(t.id) === String(taskId))
+        if (task) {
+          const subtask = task.subtasks?.find((s) => s.id === subtaskId)
+          if (subtask) subtask.completed = !subtask.completed
+          return
+        }
+      }
+    },
   },
 })
 
-export const { addTask, moveTask, addSubtask } = taskSlice.actions
+export const { addTask, moveTask, addSubtask, toggleSubtask } = taskSlice.actions
 export default taskSlice.reducer
