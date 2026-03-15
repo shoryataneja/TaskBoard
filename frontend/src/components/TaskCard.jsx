@@ -38,12 +38,12 @@ const PRIORITY_STYLES = {
   Completed: 'bg-green-50 text-green-500',
 }
 
-const AVATAR_COLORS = [
-  'bg-purple-400',
-  'bg-pink-400',
-  'bg-yellow-400',
-  'bg-green-400',
-  'bg-blue-400',
+const AVATAR_IMGS = [
+  'https://i.pravatar.cc/150?img=12',
+  'https://i.pravatar.cc/150?img=32',
+  'https://i.pravatar.cc/150?img=47',
+  'https://i.pravatar.cc/150?img=56',
+  'https://i.pravatar.cc/150?img=68',
 ]
 
 export default function TaskCard({ task }) {
@@ -167,12 +167,12 @@ export default function TaskCard({ task }) {
         {/* Avatars */}
         <div className="flex -space-x-2">
           {avatars.map((initials, i) => (
-            <div
+            <img
               key={i}
-              className={`w-6 h-6 rounded-full ${AVATAR_COLORS[i % AVATAR_COLORS.length]} border-2 border-white flex items-center justify-center text-white text-[9px] font-bold`}
-            >
-              {initials}
-            </div>
+              src={AVATAR_IMGS[i % AVATAR_IMGS.length]}
+              alt={initials}
+              className="w-6 h-6 rounded-full object-cover border-2 border-white"
+            />
           ))}
         </div>
 
