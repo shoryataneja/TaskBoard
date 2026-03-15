@@ -12,6 +12,7 @@ const taskSlice = createSlice({
         avatars: ['AK', 'SR', 'MV'],
         comments: 12,
         files: 0,
+        subtasks: [],
       },
       {
         id: 2,
@@ -21,6 +22,7 @@ const taskSlice = createSlice({
         avatars: ['PJ', 'RD'],
         comments: 10,
         files: 3,
+        subtasks: [],
       },
       {
         id: 3,
@@ -30,6 +32,7 @@ const taskSlice = createSlice({
         avatars: ['AK', 'MV', 'SR', 'PJ'],
         comments: 8,
         files: 2,
+        subtasks: [],
       },
     ],
     inProgress: [
@@ -41,6 +44,7 @@ const taskSlice = createSlice({
         avatars: ['SR', 'PJ'],
         comments: 14,
         files: 15,
+        subtasks: [],
       },
       {
         id: 5,
@@ -50,6 +54,7 @@ const taskSlice = createSlice({
         avatars: ['AK', 'RD', 'MV'],
         comments: 9,
         files: 10,
+        subtasks: [],
       },
     ],
     done: [
@@ -61,6 +66,7 @@ const taskSlice = createSlice({
         avatars: ['PJ', 'AK'],
         comments: 12,
         files: 15,
+        subtasks: [],
       },
       {
         id: 7,
@@ -70,6 +76,7 @@ const taskSlice = createSlice({
         avatars: ['SR', 'MV', 'RD'],
         comments: 9,
         files: 4,
+        subtasks: [],
       },
     ],
   },
