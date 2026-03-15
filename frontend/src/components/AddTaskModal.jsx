@@ -2,24 +2,31 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addTask } from '../redux/taskSlice'
 
-const INITIAL = { title: '', description: '', priority: 'Low' }
+const INITIAL = { title: '', description: '', priority: 'Low', dueDate: '', tag: '', difficulty: '', category: '' }
+
+function getTodayString() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
 
 export default function AddTaskModal({ columnId, onClose }) {
   const dispatch = useDispatch()
   const [form, setForm] = useState(INITIAL)
-  const [error, setError] = useState('')
+  const [errors, setErrors] = useState({})
+  const today = getTodayString()
 
   function handleChange(e) {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-    if (e.target.name === 'title') setError('')
+    const { name, value } = e.target
+    setForm((prev) => ({ ...prev, [name]: value }))
+    setErrors((prev) => ({ ...prev, [name]: '' }))
   }
 
   function handleSubmit(e) {
     e.preventDefault()
-    if (!form.title.trim()) {
-      setError('Task title is required.')
-      return
-    }
+    const next = {}
+    if (!form.title.trim()) next.title = 'Task title is required.'
+    if (form.dueDate && form.dueDate < today) next.dueDate = 'Due date cannot be in the past.'
+    if (Object.keys(next).length) { setErrors(next); return }
     dispatch(
       addTask({
         id: crypto.randomUUID(),
@@ -30,7 +37,13 @@ export default function AddTaskModal({ columnId, onClose }) {
         avatars: [],
         comments: 0,
         files: 0,
+        dueDate: form.dueDate || null,
         subtasks: [],
+        customFields: {
+          ...(form.tag        && { tag: form.tag.trim() }),
+          ...(form.difficulty && { difficulty: form.difficulty }),
+          ...(form.category   && { category: form.category.trim() }),
+        },
       })
     )
     onClose()
@@ -70,9 +83,9 @@ export default function AddTaskModal({ columnId, onClose }) {
               onChange={handleChange}
               placeholder="Enter task title"
               className={`w-full px-3 py-2 text-sm rounded-xl border outline-none transition-colors
-                ${error ? 'border-red-400 focus:ring-2 focus:ring-red-200' : 'border-gray-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400'}`}
+                ${errors.title ? 'border-red-400 focus:ring-2 focus:ring-red-200' : 'border-gray-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400'}`}
             />
-            {error && <p className="text-xs text-red-500">{error}</p>}
+            {errors.title && <p className="text-xs text-red-500">{errors.title}</p>}
           </div>
 
           {/* Description */}
@@ -100,6 +113,62 @@ export default function AddTaskModal({ columnId, onClose }) {
               <option value="Low">Low</option>
               <option value="High">High</option>
             </select>
+          </div>
+
+          {/* Due Date */}
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-gray-600">Due Date</label>
+            <input
+              type="date"
+              name="dueDate"
+              value={form.dueDate}
+              min={today}
+              onChange={handleChange}
+              className={`w-full px-3 py-2 text-sm rounded-xl border outline-none transition-colors bg-white
+                ${errors.dueDate ? 'border-red-400 focus:ring-2 focus:ring-red-200' : 'border-gray-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400'}`}
+            />
+            {errors.dueDate && <p className="text-xs text-red-500">{errors.dueDate}</p>}
+          </div>
+
+          {/* Custom Fields */}
+          <div className="flex flex-col gap-3">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Custom Fields</p>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-gray-600">Tag</label>
+                <input
+                  name="tag"
+                  value={form.tag}
+                  onChange={handleChange}
+                  placeholder="e.g. UI, Backend"
+                  className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-colors"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-gray-600">Category</label>
+                <input
+                  name="category"
+                  value={form.category}
+                  onChange={handleChange}
+                  placeholder="e.g. Frontend"
+                  className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-colors"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-medium text-gray-600">Difficulty</label>
+              <select
+                name="difficulty"
+                value={form.difficulty}
+                onChange={handleChange}
+                className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-colors bg-white"
+              >
+                <option value="">— None —</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+            </div>
           </div>
 
           {/* Actions */}
