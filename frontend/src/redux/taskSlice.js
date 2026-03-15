@@ -92,8 +92,19 @@ const taskSlice = createSlice({
       state[sourceColumn] = state[sourceColumn].filter((t) => String(t.id) !== String(taskId))
       state[destinationColumn].splice(destinationIndex, 0, task)
     },
+    addSubtask: (state, action) => {
+      const { taskId, text } = action.payload
+      for (const col of Object.values(state)) {
+        const task = col.find((t) => String(t.id) === String(taskId))
+        if (task) {
+          if (!task.subtasks) task.subtasks = []
+          task.subtasks.push({ id: crypto.randomUUID(), text, completed: false })
+          return
+        }
+      }
+    },
   },
 })
 
-export const { addTask, moveTask } = taskSlice.actions
+export const { addTask, moveTask, addSubtask } = taskSlice.actions
 export default taskSlice.reducer
