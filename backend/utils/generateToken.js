@@ -6,18 +6,17 @@
 
 const jwt = require('jsonwebtoken')
 
+const JWT_SECRET = process.env.JWT_SECRET || 'taskboard_secret'
+const JWT_EXPIRE = process.env.JWT_EXPIRE || '7d'
+
 // @desc    Generate JWT token
 // @param   {string} userId - User ID to encode in token
 // @returns {string} JWT token
 const generateToken = (userId) => {
   try {
-    // TODO: Implement JWT token generation
-    // return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-    //   expiresIn: process.env.JWT_EXPIRE || '30d',
-    // })
-    
-    // Placeholder return
-    return 'placeholder-jwt-token'
+    return jwt.sign({ userId }, JWT_SECRET, {
+      expiresIn: JWT_EXPIRE,
+    })
   } catch (error) {
     console.error('Error generating token:', error)
     throw error
@@ -29,11 +28,7 @@ const generateToken = (userId) => {
 // @returns {object} Decoded token payload
 const verifyToken = (token) => {
   try {
-    // TODO: Implement JWT token verification
-    // return jwt.verify(token, process.env.JWT_SECRET)
-    
-    // Placeholder return
-    return { id: 'placeholder-user-id' }
+    return jwt.verify(token, JWT_SECRET)
   } catch (error) {
     console.error('Error verifying token:', error)
     throw error
