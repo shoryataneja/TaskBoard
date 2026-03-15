@@ -27,7 +27,6 @@ const dbConfig = {
 // @desc    Initialize database connection
 const connectDB = async () => {
   try {
-    // TODO: Implement database connection logic
     console.log('Using JSON file storage for data persistence')
   } catch (error) {
     console.error('Database connection failed:', error)
