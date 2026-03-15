@@ -5,7 +5,7 @@
  * Verifies JWT tokens and adds user information to request object.
  */
 
-const jwt = require('jsonwebtoken')
+const { verifyToken } = require('../utils/generateToken')
 
 // @desc    Protect routes - verify JWT token
 const protect = async (req, res, next) => {
@@ -19,19 +19,23 @@ const protect = async (req, res, next) => {
       // Get token from header
       token = req.headers.authorization.split(' ')[1]
 
-      // TODO: Verify token and decode user information
-      // const decoded = jwt.verify(token, process.env.JWT_SECRET)
-      // req.user = decoded
+      // Verify token
+      const decoded = verifyToken(token)
+      
+      // Add user info to request
+      req.user = decoded
 
       next()
     } catch (error) {
-      console.error(error)
-      res.status(401).json({ message: 'Not authorized, token failed' })
+      console.error('Token verification error:', error)
+      return res.status(401).json({ 
+        message: 'Not authorized, token failed' 
+      })
     }
-  }
-
-  if (!token) {
-    res.status(401).json({ message: 'Not authorized, no token' })
+  } else {
+    return res.status(401).json({ 
+      message: 'Not authorized, no token provided' 
+    })
   }
 }
 
