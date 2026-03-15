@@ -4,9 +4,9 @@ import TaskCard from './TaskCard'
 import AddTaskModal from './AddTaskModal'
 
 const ACCENT = {
-  todo: 'bg-purple-500',
-  inProgress: 'bg-orange-400',
-  done: 'bg-green-500',
+  todo:       '#4a90d9',
+  inProgress: '#f2a93b',
+  done:       '#5cb85c',
 }
 
 export default function Column({ id, title, tasks, filteredTasks }) {
@@ -17,21 +17,22 @@ export default function Column({ id, title, tasks, filteredTasks }) {
     <div className="flex-1 min-w-0 flex flex-col gap-3">
       {/* Header */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-        <div className={`h-1 w-full rounded-full ${ACCENT[id]} mb-3`} />
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-gray-800">{title}</span>
-            <span className="text-xs bg-gray-100 text-gray-500 font-medium px-2 py-0.5 rounded-full">
+            <span className="text-sm font-bold text-gray-800">{title}</span>
+            <span className="text-xs bg-gray-100 text-gray-500 font-semibold px-2 py-0.5 rounded-full">
               {filteredTasks.length}
             </span>
           </div>
           <button
             onClick={() => setModalOpen(true)}
-            className="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center hover:bg-purple-700 transition-colors text-sm leading-none"
+            className="w-6 h-6 rounded-full text-white flex items-center justify-center transition-colors text-sm leading-none"
+            style={{ backgroundColor: ACCENT[id] }}
           >
             +
           </button>
         </div>
+        <div className={`h-1.5 w-full rounded-full mt-3`} style={{ backgroundColor: ACCENT[id] }} />
       </div>
 
       {/* Cards */}
