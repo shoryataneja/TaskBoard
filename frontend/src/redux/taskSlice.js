@@ -13,6 +13,8 @@ const taskSlice = createSlice({
         comments: 12,
         files: 0,
         subtasks: [],
+        dueDate: null,
+        customFields: {},
       },
       {
         id: 2,
@@ -23,6 +25,8 @@ const taskSlice = createSlice({
         comments: 10,
         files: 3,
         subtasks: [],
+        dueDate: null,
+        customFields: {},
       },
       {
         id: 3,
@@ -33,6 +37,8 @@ const taskSlice = createSlice({
         comments: 8,
         files: 2,
         subtasks: [],
+        dueDate: null,
+        customFields: {},
       },
     ],
     inProgress: [
@@ -45,6 +51,8 @@ const taskSlice = createSlice({
         comments: 14,
         files: 15,
         subtasks: [],
+        dueDate: null,
+        customFields: {},
       },
       {
         id: 5,
@@ -55,6 +63,8 @@ const taskSlice = createSlice({
         comments: 9,
         files: 10,
         subtasks: [],
+        dueDate: null,
+        customFields: {},
       },
     ],
     done: [
@@ -67,6 +77,8 @@ const taskSlice = createSlice({
         comments: 12,
         files: 15,
         subtasks: [],
+        dueDate: null,
+        customFields: {},
       },
       {
         id: 7,
@@ -77,6 +89,8 @@ const taskSlice = createSlice({
         comments: 9,
         files: 4,
         subtasks: [],
+        dueDate: null,
+        customFields: {},
       },
     ],
   },
