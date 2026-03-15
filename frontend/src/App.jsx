@@ -9,36 +9,36 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
-        <Route 
-          path="/login" 
-          element={
-            isAuthenticated() ? <Navigate to="/" replace /> : <Login />
-          } 
+        {/* Root — redirect based on auth status */}
+        <Route
+          path="/"
+          element={<Navigate to={isAuthenticated() ? '/dashboard' : '/login'} replace />}
         />
-        <Route 
-          path="/signup" 
-          element={
-            isAuthenticated() ? <Navigate to="/" replace /> : <Signup />
-          } 
+
+        {/* Public routes — redirect to dashboard if already logged in */}
+        <Route
+          path="/login"
+          element={isAuthenticated() ? <Navigate to="/dashboard" replace /> : <Login />}
         />
-        
-        {/* Protected Routes */}
-        <Route 
-          path="/" 
+        <Route
+          path="/signup"
+          element={isAuthenticated() ? <Navigate to="/dashboard" replace /> : <Signup />}
+        />
+
+        {/* Protected route */}
+        <Route
+          path="/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
-          } 
+          }
         />
-        
-        {/* Catch all route - redirect to dashboard if authenticated, login if not */}
-        <Route 
-          path="*" 
-          element={
-            <Navigate to={isAuthenticated() ? "/" : "/login"} replace />
-          } 
+
+        {/* Catch-all */}
+        <Route
+          path="*"
+          element={<Navigate to={isAuthenticated() ? '/dashboard' : '/login'} replace />}
         />
       </Routes>
     </Router>

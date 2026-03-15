@@ -30,7 +30,7 @@ export default function Login() {
       setToken(response.token)
       
       // Redirect to dashboard
-      window.location.href = '/'
+      window.location.href = '/dashboard'
     } catch (err) {
       setError(err.message)
     } finally {
