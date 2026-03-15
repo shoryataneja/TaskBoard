@@ -21,6 +21,12 @@ export default function Dashboard() {
   const filter = useSelector((state) => state.filter.filter)
   const dispatch = useDispatch()
 
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const hasOverdue = Object.values(tasks).flat().some(
+    (t) => t.dueDate && new Date(t.dueDate + 'T00:00:00') < today
+  )
+
   function getFilteredTasks(columnId, columnTasks) {
     if (filter === 'all') return columnTasks
     if (filter === 'completed') return columnId === 'done' ? columnTasks : []
@@ -52,6 +58,15 @@ export default function Dashboard() {
         <Navbar />
 
         <main className="flex-1 p-6 flex flex-col gap-6 overflow-auto">
+          {/* Overdue banner */}
+          {hasOverdue && (
+            <div className="flex items-center gap-2 px-4 py-2.5 bg-red-50 border border-red-200 rounded-xl text-red-600 text-xs font-medium">
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+              </svg>
+              You have overdue tasks
+            </div>
+          )}
           {/* Page header */}
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-1">
