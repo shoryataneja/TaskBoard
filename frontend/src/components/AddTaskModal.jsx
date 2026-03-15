@@ -30,6 +30,7 @@ export default function AddTaskModal({ columnId, onClose }) {
         avatars: [],
         comments: 0,
         files: 0,
+        subtasks: [],
       })
     )
     onClose()
