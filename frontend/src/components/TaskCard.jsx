@@ -55,9 +55,10 @@ export default function TaskCard({ task }) {
 
       {/* Subtasks section */}
       <div className="flex flex-col gap-2">
+        {/* Progress header — clickable to expand */}
         <button
           onClick={() => setExpanded((v) => !v)}
-          className="flex items-center justify-between w-full"
+          className="flex items-center justify-between w-full group"
         >
           <span className="text-xs text-gray-500 font-medium">
             Subtasks{total > 0 ? ` · ${completed}/${total} done` : ''}
@@ -80,10 +81,11 @@ export default function TaskCard({ task }) {
           </div>
         )}
 
+        {/* Expanded subtask list + add input */}
         {expanded && (
           <div className="flex flex-col gap-1.5 mt-1">
             {subtasks.map((s) => (
-              <label key={s.id} className="flex items-center gap-2 cursor-pointer">
+              <label key={s.id} className="flex items-center gap-2 cursor-pointer group/item">
                 <input
                   type="checkbox"
                   checked={s.completed}
@@ -119,6 +121,7 @@ export default function TaskCard({ task }) {
 
       {/* Footer */}
       <div className="flex items-center justify-between pt-1">
+        {/* Avatars */}
         <div className="flex -space-x-2">
           {avatars.map((initials, i) => (
             <div
@@ -129,6 +132,8 @@ export default function TaskCard({ task }) {
             </div>
           ))}
         </div>
+
+        {/* Stats */}
         <div className="flex items-center gap-3 text-gray-400">
           <span className="flex items-center gap-1 text-xs">
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
