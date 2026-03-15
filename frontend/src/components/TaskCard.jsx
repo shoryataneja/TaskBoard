@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { toggleSubtask } from '../redux/taskSlice'
+import { addSubtask, toggleSubtask } from '../redux/taskSlice'
 
 const PRIORITY_STYLES = {
   Low: 'bg-blue-50 text-blue-500',
@@ -20,6 +20,19 @@ export default function TaskCard({ task }) {
   const { id, priority, title, description, avatars, comments, files, subtasks = [] } = task
   const dispatch = useDispatch()
   const [expanded, setExpanded] = useState(false)
+  const [input, setInput] = useState('')
+
+  function handleAdd() {
+    const text = input.trim()
+    if (!text) return
+    dispatch(addSubtask({ taskId: id, text }))
+    setInput('')
+    setExpanded(true)
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter') handleAdd()
+  }
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-3">
@@ -53,7 +66,7 @@ export default function TaskCard({ task }) {
           </svg>
         </button>
 
-        {expanded && subtasks.length > 0 && (
+        {expanded && (
           <div className="flex flex-col gap-1.5 mt-1">
             {subtasks.map((s) => (
               <label key={s.id} className="flex items-center gap-2 cursor-pointer">
@@ -68,6 +81,24 @@ export default function TaskCard({ task }) {
                 </span>
               </label>
             ))}
+
+            {/* Add subtask input */}
+            <div className="flex items-center gap-1.5 mt-1">
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Add subtask..."
+                className="flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-gray-200 outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-colors"
+              />
+              <button
+                onClick={handleAdd}
+                disabled={!input.trim()}
+                className="text-xs px-2.5 py-1.5 rounded-lg bg-purple-600 text-white font-medium hover:bg-purple-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                Add
+              </button>
+            </div>
           </div>
         )}
       </div>
