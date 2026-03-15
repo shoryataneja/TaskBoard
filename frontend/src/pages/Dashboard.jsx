@@ -5,6 +5,7 @@ import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import Column from '../components/Column'
 import FilterBar from '../components/FilterBar'
+import LogoutButton from '../components/LogoutButton'
 
 const TEAM_AVATARS = ['PJ', 'AK', 'SR', 'MV', 'RD']
 const AVATAR_COLORS = ['bg-purple-400', 'bg-pink-400', 'bg-yellow-400', 'bg-green-400', 'bg-blue-400']
@@ -69,7 +70,7 @@ export default function Dashboard() {
                 </button>
               </div>
 
-              {/* Filter / Today buttons */}
+              {/* Filter / Today / Logout buttons */}
               <div className="flex items-center gap-2 mt-1">
                 <FilterBar />
                 <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
@@ -78,6 +79,7 @@ export default function Dashboard() {
                   </svg>
                   Today
                 </button>
+                <LogoutButton />
               </div>
             </div>
 
