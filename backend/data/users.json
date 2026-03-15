@@ -10,5 +10,11 @@
     "name": "Shorya",
     "email": "shorya@test.com",
     "password": "$2b$10$BNUamH3BvlGDNaWXfrKemed7VoK3GRDtYps/P.71s1gFyUSKQRMoq"
+  },
+  {
+    "id": "5f214470-d902-4350-a219-754ed0f2799d",
+    "name": "Shorya Taneja",
+    "email": "shorya@gmail.com",
+    "password": "$2b$10$WPl/uKUppzIGo2HMbsfkTe0YrKSKZXNenRGf3Z4ga/77Ks1MFwFGK"
   }
 ]
