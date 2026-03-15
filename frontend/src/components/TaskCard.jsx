@@ -2,6 +2,42 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addSubtask, toggleSubtask } from '../redux/taskSlice'
 
+function getDueDateStatus(dueDate) {
+  if (!dueDate) return null
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const due = new Date(dueDate + 'T00:00:00')
+  const diffDays = Math.round((due - today) / 86400000)
+  if (diffDays < 0)  return { label: '⚠ Overdue',      style: 'text-red-500' }
+  if (diffDays === 0) return { label: '⚠ Due Today',    style: 'text-orange-500' }
+  if (diffDays === 1) return { label: '⚠ Due Tomorrow', style: 'text-yellow-500' }
+  return {
+    label: 'Due: ' + due.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+    style: 'text-gray-400',
+  }
+}
+
+const TAG_COLORS = [
+  'bg-purple-100 text-purple-600',
+  'bg-blue-100 text-blue-600',
+  'bg-green-100 text-green-600',
+  'bg-pink-100 text-pink-600',
+  'bg-yellow-100 text-yellow-700',
+  'bg-orange-100 text-orange-600',
+]
+
+const DIFFICULTY_STYLES = {
+  Easy:   'bg-green-50 text-green-600',
+  Medium: 'bg-yellow-50 text-yellow-700',
+  Hard:   'bg-red-50 text-red-500',
+}
+
+function tagColor(str) {
+  let n = 0
+  for (let i = 0; i < str.length; i++) n += str.charCodeAt(i)
+  return TAG_COLORS[n % TAG_COLORS.length]
+}
+
 const PRIORITY_STYLES = {
   Low: 'bg-blue-50 text-blue-500',
   High: 'bg-orange-50 text-orange-500',
@@ -17,7 +53,7 @@ const AVATAR_COLORS = [
 ]
 
 export default function TaskCard({ task }) {
-  const { id, priority, title, description, avatars, comments, files, subtasks = [] } = task
+  const { id, priority, title, description, avatars, comments, files, subtasks = [], dueDate = null, customFields = {} } = task
   const dispatch = useDispatch()
   const [expanded, setExpanded] = useState(false)
   const [input, setInput] = useState('')
@@ -25,6 +61,7 @@ export default function TaskCard({ task }) {
   const completed = subtasks.filter((s) => s.completed).length
   const total = subtasks.length
   const progress = total > 0 ? Math.round((completed / total) * 100) : 0
+  const dueDateStatus = getDueDateStatus(dueDate)
 
   function handleAdd() {
     const text = input.trim()
@@ -45,13 +82,39 @@ export default function TaskCard({ task }) {
         {priority}
       </span>
 
-      {/* Title & description */}
+      {/* Title, description & due date */}
       <div>
         <p className="text-sm font-semibold text-gray-800 mb-1">{title}</p>
         {description && (
           <p className="text-xs text-gray-400 leading-relaxed">{description}</p>
         )}
+        {dueDateStatus && (
+          <p className={`text-xs font-medium mt-1.5 ${dueDateStatus.style}`}>
+            {dueDateStatus.label}
+          </p>
+        )}
       </div>
+
+      {/* Custom field badges */}
+      {(customFields.tag || customFields.difficulty || customFields.category) && (
+        <div className="flex flex-wrap gap-1.5">
+          {customFields.tag && (
+            <span className={`text-[11px] font-medium px-2 py-0.5 rounded-md ${tagColor(customFields.tag)}`}>
+              {customFields.tag}
+            </span>
+          )}
+          {customFields.category && (
+            <span className={`text-[11px] font-medium px-2 py-0.5 rounded-md ${tagColor(customFields.category)}`}>
+              {customFields.category}
+            </span>
+          )}
+          {customFields.difficulty && (
+            <span className={`text-[11px] font-medium px-2 py-0.5 rounded-md ${DIFFICULTY_STYLES[customFields.difficulty] ?? 'bg-gray-100 text-gray-500'}`}>
+              {customFields.difficulty}
+            </span>
+          )}
+        </div>
+      )}
 
       {/* Subtasks section */}
       <div className="flex flex-col gap-2">
