@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "id": "0602812a-4662-46d8-a607-23058ff1eaf5",
+    "name": "Test User",
+    "email": "test@example.com",
+    "password": "$2b$10$9YaKyYcowTmJh.pwJhr7HO4PrJHJEGcXjTiUjlqZg2PiagXpSltYC"
+  },
+  {
+    "id": "525bbf91-c58b-4d94-9e5f-1653e92365c3",
+    "name": "Shorya",
+    "email": "shorya@test.com",
+    "password": "$2b$10$BNUamH3BvlGDNaWXfrKemed7VoK3GRDtYps/P.71s1gFyUSKQRMoq"
+  }
+]
