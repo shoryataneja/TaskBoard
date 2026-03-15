@@ -8,8 +8,13 @@ import Column from '../components/Column'
 import FilterBar from '../components/FilterBar'
 import LogoutButton from '../components/LogoutButton'
 
-const TEAM_AVATARS = ['PJ', 'AK', 'SR', 'MV', 'RD']
-const AVATAR_COLORS = ['bg-purple-400', 'bg-pink-400', 'bg-yellow-400', 'bg-green-400', 'bg-blue-400']
+const TEAM_AVATARS = [
+  { id: 'PJ', img: 'https://i.pravatar.cc/150?img=47' },
+  { id: 'AK', img: 'https://i.pravatar.cc/150?img=12' },
+  { id: 'SR', img: 'https://i.pravatar.cc/150?img=32' },
+  { id: 'MV', img: 'https://i.pravatar.cc/150?img=56' },
+  { id: 'RD', img: 'https://i.pravatar.cc/150?img=68' },
+]
 
 const COLUMN_META = [
   { id: 'todo',       title: 'To Do' },
@@ -57,7 +62,7 @@ export default function Dashboard() {
     }))
   }
   return (
-    <div className="min-h-screen w-screen bg-gray-100 flex font-sans">
+    <div className="min-h-screen w-screen flex font-sans" style={{ backgroundColor: '#f5f5f5' }}>
       <Sidebar />
 
       {/* Main content */}
@@ -78,16 +83,17 @@ export default function Dashboard() {
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
-                <h1 className="text-3xl font-semibold text-gray-900">Mobile App</h1>
-                {/* Action icons */}
-                <button className="p-1 text-gray-400 hover:text-gray-600">
+                <h1 className="text-4xl font-black tracking-tight text-gray-900">Mobile App</h1>
+                {/* Edit icon */}
+                <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </svg>
                 </button>
-                <button className="p-1 text-gray-400 hover:text-gray-600">
+                {/* Link/share icon */}
+                <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                   </svg>
                 </button>
               </div>
@@ -114,13 +120,13 @@ export default function Dashboard() {
             {/* Right: Invite + team avatars */}
             <div className="flex items-center gap-3">
               <div className="flex -space-x-2">
-                {TEAM_AVATARS.map((initials, i) => (
-                  <div
-                    key={initials}
-                    className={`w-8 h-8 rounded-full ${AVATAR_COLORS[i]} border-2 border-white flex items-center justify-center text-white text-[10px] font-bold`}
-                  >
-                    {initials}
-                  </div>
+                {TEAM_AVATARS.map((av) => (
+                  <img
+                    key={av.id}
+                    src={av.img}
+                    alt={av.id}
+                    className="w-8 h-8 rounded-full object-cover border-2 border-white"
+                  />
                 ))}
               </div>
               <button className="flex items-center gap-1.5 px-4 py-2 bg-purple-600 text-white text-xs font-semibold rounded-xl hover:bg-purple-700 transition-colors">
