@@ -22,6 +22,10 @@ export default function TaskCard({ task }) {
   const [expanded, setExpanded] = useState(false)
   const [input, setInput] = useState('')
 
+  const completed = subtasks.filter((s) => s.completed).length
+  const total = subtasks.length
+  const progress = total > 0 ? Math.round((completed / total) * 100) : 0
+
   function handleAdd() {
     const text = input.trim()
     if (!text) return
@@ -56,7 +60,7 @@ export default function TaskCard({ task }) {
           className="flex items-center justify-between w-full"
         >
           <span className="text-xs text-gray-500 font-medium">
-            Subtasks{subtasks.length > 0 ? ` · ${subtasks.length} total` : ''}
+            Subtasks{total > 0 ? ` · ${completed}/${total} done` : ''}
           </span>
           <svg
             className={`w-3.5 h-3.5 text-gray-400 transition-transform ${expanded ? 'rotate-180' : ''}`}
@@ -65,6 +69,16 @@ export default function TaskCard({ task }) {
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
+
+        {/* Progress bar */}
+        {total > 0 && (
+          <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-purple-500 rounded-full transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        )}
 
         {expanded && (
           <div className="flex flex-col gap-1.5 mt-1">
