@@ -1,8 +1,19 @@
 const express = require('express')
 const cors = require('cors')
+const mongoose = require('mongoose')
+require('dotenv').config()
 
 const app = express()
 const PORT = process.env.PORT || 3001
+
+// MongoDB connection (required for deployment)
+mongoose.connect(process.env.MONGO_URI)
+.then(() => {
+  console.log("✅ MongoDB connected")
+})
+.catch((err) => {
+  console.log("❌ MongoDB connection error:", err)
+})
 
 // Middleware
 app.use(cors())
@@ -43,7 +54,6 @@ app.use((err, req, res, next) => {
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" })
 })
-
 
 app.listen(PORT, () => {
   console.log(`🚀 TaskBoard API Server running on port ${PORT}`)
